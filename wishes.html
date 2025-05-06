@@ -39,7 +39,7 @@
             margin-bottom: 20px;
         }
 
-        .wish-input input {
+        .wish-input input[type="text"] {
             flex: 1;
             padding: 10px;
             border: none;
@@ -62,6 +62,34 @@
 
         .wish-input button:hover {
             background: #e63950;
+        }
+
+        .backup-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .backup-controls button,
+        .backup-controls label {
+            background: #ff4d6d;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .backup-controls button:hover,
+        .backup-controls label:hover {
+            background: #e63950;
+        }
+
+        .backup-controls input[type="file"] {
+            display: none;
         }
 
         .wish-list {
@@ -217,6 +245,11 @@
             <input type="text" id="wish-input" placeholder="Введите ваше желание...">
             <button onclick="addWish()">Добавить</button>
         </div>
+        <div class="backup-controls">
+            <button onclick="exportWishes()">Экспорт желаний</button>
+            <label for="import-wishes">Импорт желаний</label>
+            <input type="file" id="import-wishes" accept=".json" onchange="importWishes(event)">
+        </div>
         <ul class="wish-list" id="wish-list"></ul>
     </div>
 
@@ -311,6 +344,43 @@
             wishes[index].completed = !wishes[index].completed;
             localStorage.setItem('wishes', JSON.stringify(wishes));
             renderWishes();
+        }
+
+        function exportWishes() {
+            const data = JSON.stringify(wishes, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'wishes.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importWishes(event) {
+            const file = event.target.files[0];
+            if (file && file.type === 'application/json') {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const importedWishes = JSON.parse(e.target.result);
+                        if (Array.isArray(importedWishes) && importedWishes.every(w => w.text && typeof w.completed === 'boolean')) {
+                            wishes = importedWishes;
+                            localStorage.setItem('wishes', JSON.stringify(wishes));
+                            renderWishes();
+                            alert('Желания успешно импортированы!');
+                        } else {
+                            alert('Неверный формат файла. Ожидается массив объектов с полями text и completed.');
+                        }
+                    } catch (error) {
+                        alert('Ошибка при чтении файла: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            } else {
+                alert('Пожалуйста, выберите файл в формате JSON.');
+            }
+            event.target.value = ''; // Reset file input
         }
 
         // Initialize
