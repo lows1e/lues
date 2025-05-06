@@ -71,7 +71,6 @@
             justify-content: center;
         }
 
-        .backup-controls button,
         .backup-controls label {
             background: #ff4d6d;
             border: none;
@@ -83,7 +82,6 @@
             transition: all 0.3s ease;
         }
 
-        .backup-controls button:hover,
         .backup-controls label:hover {
             background: #e63950;
         }
@@ -246,7 +244,6 @@
             <button onclick="addWish()">Добавить</button>
         </div>
         <div class="backup-controls">
-            <button onclick="exportWishes()">Экспорт желаний</button>
             <label for="import-wishes">Импорт желаний</label>
             <input type="file" id="import-wishes" accept=".json" onchange="importWishes(event)">
         </div>
@@ -329,24 +326,7 @@
             });
         }
 
-        function addWish() {
-            const input = document.getElementById('wish-input');
-            const text = input.value.trim();
-            if (text) {
-                wishes.push({ text, completed: false });
-                localStorage.setItem('wishes', JSON.stringify(wishes));
-                input.value = '';
-                renderWishes();
-            }
-        }
-
-        function toggleWish(index) {
-            wishes[index].completed = !wishes[index].completed;
-            localStorage.setItem('wishes', JSON.stringify(wishes));
-            renderWishes();
-        }
-
-        function exportWishes() {
+        function saveWishesToFile() {
             const data = JSON.stringify(wishes, null, 2);
             const blob = new Blob([data], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -355,6 +335,25 @@
             a.download = 'wishes.json';
             a.click();
             URL.revokeObjectURL(url);
+        }
+
+        function addWish() {
+            const input = document.getElementById('wish-input');
+            const text = input.value.trim();
+            if (text) {
+                wishes.push({ text, completed: false });
+                localStorage.setItem('wishes', JSON.stringify(wishes));
+                input.value = '';
+                renderWishes();
+                saveWishesToFile();
+            }
+        }
+
+        function toggleWish(index) {
+            wishes[index].completed = !wishes[index].completed;
+            localStorage.setItem('wishes', JSON.stringify(wishes));
+            renderWishes();
+            saveWishesToFile();
         }
 
         function importWishes(event) {
