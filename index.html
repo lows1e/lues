@@ -336,7 +336,7 @@
             } else {
                 const years = Math.floor(diffDays / 365);
                 const remainingDays = diffDays % 365;
-                message.textContent = `Мы вместе уже ${years} ${years === 1 ? 'год' : years <住 ? 'года' : 'лет'} и ${remainingDays} дней!`;
+                message.textContent = `Мы вместе уже ${years} ${years === 1 ? 'год' : years < 5 ? 'года' : 'лет'} и ${remainingDays} дней!`;
             }
         }
         
