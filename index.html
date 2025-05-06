@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Наша история любви</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            height: 100vh;
+            overflow: hidden;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .avatar {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 5px solid white;
+            transition: all 0.3s ease;
+        }
+
+        .avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .avatar video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .heart-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+        }
+
+        .heart {
+            position: relative;
+            width: 100px;
+            height: 90px;
+            background-color: #ff4d6d;
+            transform: rotate(-45deg);
+            box-shadow: 0 0 40px #ff4d6d;
+            animation: beat 1.5s infinite;
+        }
+
+        .heart:before,
+        .heart:after {
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 90px;
+            background-color: #ff4d6d;
+            border-radius: 50%;
+        }
+
+        .heart:before {
+            top: -50px;
+            left: 0;
+        }
+
+        .heart:after {
+            top: 0;
+            left: 50px;
+        }
+
+        .counter {
+            margin-top: 20px;
+            font-size: 24px;
+            text-align: center;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .message {
+            font-size: 28px;
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+            animation-delay: 1s;
+        }
+
+        .love-message {
+            font-size: 20px;
+            margin-top: 10px;
+            text-align: center;
+            font-style: italic;
+            color: #ffe4e1;
+            min-height: 30px;
+        }
+
+        .music-control {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .music-control:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
+        }
+
+        .wishes-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .wishes-link:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        @keyframes beat {
+            0% { transform: rotate(-45deg) scale(1); }
+            25% { transform: rotate(-45deg) scale(1.1); }
+            40% { transform: rotate(-45deg) scale(1); }
+            60% { transform: rotate(-45deg) scale(1.2); }
+            100% { transform: rotate(-45deg) scale(1); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .floating-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-heart {
+            position: absolute;
+            opacity: 0;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            animation: float 10s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+                left: 10%;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-800px) rotate(360deg);
+                opacity: 0;
+                left: 90%;
+            }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: sparkle 1.5s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes sparkle {
+            0% { transform: scale(0); opacity: 1; }
+            50% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-hearts" id="hearts-container"></div>
+    
+    <a href="wishes.html" class="wishes-link">Наши желания</a>
+    
+    <button class="music-control" id="music-toggle">🎵</button>
+    
+    <div class="container">
+        <div class="avatar">
+            <video autoplay loop muted>
+                <source src="avatar1.mp4" type="video/mp4">
+            </video>
+        </div>
+        
+        <div class="heart-container">
+            <div class="heart"></div>
+        </div>
+        
+        <div class="avatar">
+            <video autoplay loop muted>
+                <source src="avatar2.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+    
+    <div class="message">Мы вместе уже:</div>
+    <div class="counter" id="days-counter"></div>
+    <div class="love-message" id="love-message"></div>
+
+    <audio id="background-music" loop muted>
+        <source src="audio.mp3" type="audio/mpeg">
+
+    </audio>
+
+    <script>
+        // Music control
+        const music = document.getElementById('background-music');
+        const musicToggle = document.getElementById('music-toggle');
+        let isPlaying = false;
+
+        musicToggle.addEventListener('click', () => {
+            if (isPlaying) {
+                music.pause();
+                musicToggle.textContent = '🎵';
+                isPlaying = false;
+            } else {
+                music.muted = false; // Unmute on user interaction
+                music.play().catch(error => {
+                    console.error('Audio playback failed:', error);
+                    musicToggle.textContent = '🎵';
+                    isPlaying = false;
+                });
+                musicToggle.textContent = '🔇';
+                isPlaying = true;
+            }
+        });
+
+        // Typewriter effect for love message
+        const loveMessages = [
+            "Ты - моё счастье каждый день! 💖",
+            "С тобой время летит незаметно... 😘",
+            "Люблю тебя больше всего на свете! 🌟",
+            "Мы - идеальная пара! 💑"
+        ];
+        let messageIndex = 0;
+        let charIndex = 0;
+        const loveMessageElement = document.getElementById('love-message');
+
+        function typeMessage() {
+            if (charIndex < loveMessages[messageIndex].length) {
+                loveMessageElement.textContent += loveMessages[messageIndex].charAt(charIndex);
+                charIndex++;
+                setTimeout(typeMessage, 100);
+            } else {
+                setTimeout(() => {
+                    loveMessageElement.textContent = '';
+                    charIndex = 0;
+                    messageIndex = (messageIndex + 1) % loveMessages.length;
+                    typeMessage();
+                }, 2000);
+            }
+        }
+
+        // Days counter
+        function updateCounter() {
+            const startDate = new Date('2025-04-24');
+            const today = new Date();
+            startDate.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0);
+            
+            const diffTime = Math.abs(today - startDate);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); 
+            
+            document.getElementById('days-counter').textContent = `${diffDays} дней`;
+
+            const message = document.querySelector('.message');
+            if (diffDays === 1) {
+                message.textContent = 'Наш первый день вместе!';
+            } else if (diffDays < 7) {
+                message.textContent = `Мы вместе уже ${diffDays} дня!`;
+            } else if (diffDays < 30) {
+                message.textContent = `Мы вместе уже ${diffDays} дней!`;
+            } else if (diffDays < 365) {
+                const months = Math.floor(diffDays / 30);
+                message.textContent = `Мы вместе уже ${months} ${months === 1 ? 'месяц' : months < 5 ? 'месяца' : 'месяцев'}!`;
+            } else {
+                const years = Math.floor(diffDays / 365);
+                const remainingDays = diffDays % 365;
+                message.textContent = `Мы вместе уже ${years} ${years === 1 ? 'год' : years < 5 ? 'года' : 'лет'} и ${remainingDays} дней!`;
+            }
+        }
+        
+        // Floating hearts
+        function createHearts() {
+            const container = document.getElementById('hearts-container');
+            const heartCount = 20;
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerHTML = '❤';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.top = Math.random() * 100 + '%';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                heart.style.animationDuration = (Math.random() * 15 + 5) + 's';
+                heart.style.animationDelay = (Math.random() * 5) + 's';
+                container.appendChild(heart);
+            }
+        }
+
+        // Sparkle effect
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = Math.random() * window.innerWidth + 'px';
+            sparkle.style.top = Math.random() * window.innerHeight + 'px';
+            document.body.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 1500);
+        }
+
+        // Initialize
+        window.onload = function() {
+            updateCounter();
+            createHearts();
+            typeMessage();
+            setInterval(updateCounter, 1000);
+            setInterval(createSparkle, 500);
+        };
+    </script>
+</body>
+</html>
