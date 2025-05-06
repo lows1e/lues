@@ -258,7 +258,8 @@
 
     <audio id="background-music" loop muted>
         <source src="audio.mp3" type="audio/mpeg">
-
+        <source src="https://www.kozco.com/tech/piano2-CoolEdit.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
     </audio>
 
     <script>
@@ -273,7 +274,7 @@
                 musicToggle.textContent = '🎵';
                 isPlaying = false;
             } else {
-                music.muted = false; // Unmute on user interaction
+                music.muted = false;
                 music.play().catch(error => {
                     console.error('Audio playback failed:', error);
                     musicToggle.textContent = '🎵';
@@ -335,7 +336,7 @@
             } else {
                 const years = Math.floor(diffDays / 365);
                 const remainingDays = diffDays % 365;
-                message.textContent = `Мы вместе уже ${years} ${years === 1 ? 'год' : years < 5 ? 'года' : 'лет'} и ${remainingDays} дней!`;
+                message.textContent = `Мы вместе уже ${years} ${years === 1 ? 'год' : years <住 ? 'года' : 'лет'} и ${remainingDays} дней!`;
             }
         }
         
