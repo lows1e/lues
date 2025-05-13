@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Наша история любви</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -36,11 +37,13 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             border: 5px solid white;
             transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
         }
 
         .avatar:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 77, 109, 0.5);
         }
 
         .avatar video {
@@ -90,10 +93,21 @@
         }
 
         .counter {
-            margin-top: 20px;
+            margin-top: 50px;
             font-size: 24px;
             text-align: center;
             text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .sweet-message {
+            margin-top: 10px;
+            font-size: 18px;
+            text-align: center;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+            animation-delay: 2s;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
         }
 
         .message {
@@ -104,56 +118,21 @@
             opacity: 0;
             animation: fadeIn 2s forwards;
             animation-delay: 1s;
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid #ff4d6d;
+            animation: typing 3s steps(40, end) forwards, blink 0.75s step-end infinite;
         }
 
-        .love-message {
-            font-size: 20px;
-            margin-top: 10px;
-            text-align: center;
-            font-style: italic;
-            color: #ffe4e1;
-            min-height: 30px;
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
         }
 
-        .music-control {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            transition: all 0.3s ease;
-        }
-
-        .music-control:hover {
-            background: rgba(255, 255, 255, 0.4);
-            transform: scale(1.1);
-        }
-
-        .wishes-link {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            color: #fff;
-            font-size: 16px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .wishes-link:hover {
-            background: rgba(255, 255, 255, 0.4);
+        @keyframes blink {
+            from, to { border-color: transparent; }
+            50% { border-color: #ff4d6d; }
         }
 
         @keyframes beat {
@@ -212,30 +191,185 @@
 
         .sparkle {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 5px;
+            height: 5px;
             background: rgba(255, 255, 255, 0.8);
             border-radius: 50%;
-            animation: sparkle 1.5s infinite;
-            pointer-events: none;
+            animation: sparkle 2s infinite;
+            z-index: -1;
         }
 
         @keyframes sparkle {
-            0% { transform: scale(0); opacity: 1; }
-            50% { transform: scale(1); opacity: 0.5; }
+            0% { transform: scale(0); opacity: 0.8; }
+            50% { transform: scale(1); opacity: 0.4; }
             100% { transform: scale(0); opacity: 0; }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(45deg, #ff6b6b, #ff9a9e);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            color: white;
+            transform: scale(0);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-content.show {
+            transform: scale(1);
+        }
+
+        .modal-content h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content button {
+            background: #ff4d6d;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .modal-content button:hover {
+            background: #e63956;
+        }
+
+        .modal-content input {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            width: 100%;
+            max-width: 200px;
+            text-align: center;
+            background: #fff;
+            color: #333;
+        }
+
+        .modal-content input::placeholder {
+            color: #888;
+        }
+
+        .error-text {
+            color: #ffe6e6;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .sound-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 154, 158, 0.7);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            z-index: 1000;
+            transition: background 0.3s ease;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .sound-toggle:hover {
+            background: rgba(230, 57, 86, 0.7);
+            opacity: 1;
+        }
+
+        .storybook {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .storybook-page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            text-align: center;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+
+        .storybook-page.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .storybook-page span {
+            font-size: 2rem;
+            margin-right: 0.5rem;
+        }
+
+        .storybook-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .storybook-nav button {
+            background: #ff4d6d;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .storybook-nav button:hover {
+            background: #e63956;
+        }
+
+        .storybook-nav button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
         }
     </style>
 </head>
 <body>
     <div class="floating-hearts" id="hearts-container"></div>
     
-    <a href="wishes.html" class="wishes-link">Наши желания</a>
-    
-    <button class="music-control" id="music-toggle">🎵</button>
-    
     <div class="container">
-        <div class="avatar">
+        <div class="avatar" id="maxim-avatar">
             <video autoplay loop muted>
                 <source src="avatar1.mp4" type="video/mp4">
             </video>
@@ -245,7 +379,7 @@
             <div class="heart"></div>
         </div>
         
-        <div class="avatar">
+        <div class="avatar" id="kristina-avatar">
             <video autoplay loop muted>
                 <source src="avatar2.mp4" type="video/mp4">
             </video>
@@ -254,60 +388,95 @@
     
     <div class="message">Мы вместе уже:</div>
     <div class="counter" id="days-counter"></div>
-    <div class="love-message" id="love-message"></div>
+    <div class="sweet-message">Каждый день с тобой — как маленькое чудо, моя любовь! 💞</div>
 
-    <audio id="background-music" loop muted>
-        <source src="audio.mp3" type="audio/mpeg">
-        <source src="https://www.kozco.com/tech/piano2-CoolEdit.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+    <!-- Sound Toggle Button -->
+ 
+
+    <!-- Maxim Modal (Password) -->
+    <div class="modal" id="maxim-modal">
+        <div class="modal-content">
+            <h2>О Максиме 💫</h2>
+            <p>Введите секретный пароль, чтобы узнать больше о нашем любимом Максиме:</p>
+            <input type="password" id="maxim-password" placeholder="Пароль">
+            <button onclick="checkMaximPassword()">Открыть</button>
+            <p class="error-text" id="maxim-error-text">Ой, пароль неверный! 😔</p>
+        </div>
+    </div>
+
+    <!-- Maxim Info Modal -->
+    <div class="modal" id="maxim-info-modal">
+        <div class="modal-content">
+            <h2>О Максиме 🌟</h2>
+            <p>Максим — душа компании, любитель приключений и мастер рассказывать истории. Его улыбка согревает сердца, а энергия заряжает всех вокруг! Он всегда готов к новым открытиям и делает каждый момент незабываемым! 😊✨</p>
+            <button onclick="closeModal('maxim-info-modal')">Закрыть</button>
+        </div>
+    </div>
+
+    <!-- Kristina Modal (Password) -->
+    <div class="modal" id="kristina-modal">
+        <div class="modal-content">
+            <h2>О Кристине 🌸</h2>
+            <p>Введите секретный пароль, чтобы узнать больше о нашей прекрасной Кристине:</p>
+            <input type="password" id="kristina-password" placeholder="Пароль">
+            <button onclick="checkPassword()">Открыть</button>
+            <p class="error-text" id="error-text">Ой, пароль неверный! 😔</p>
+        </div>
+    </div>
+
+    <!-- Kristina Info Modal -->
+    <div class="modal" id="kristina-info-modal">
+        <div class="modal-content">
+            <h2>Книга о Кристине 📖</h2>
+            <div class="storybook">
+                <div class="storybook-page" data-page="1">
+                    <span>🩺</span> Кристина — будущий медик, изучает медицинскую кибернетику в СИБГМУ, соединяя науку и заботу о людях.
+                </div>
+                <div class="storybook-page" data-page="2">
+                    <span>🎂</span> Родилась 21 июля 2006 года — летний день, когда мир стал ярче!
+                </div>
+                <div class="storybook-page" data-page="3">
+                    <span>✅</span> Аллергий нет — её здоровье крепкое, как её дух!
+                </div>
+                <div class="storybook-page" data-page="4">
+                    <span>🚫</span> Не любит гречку, Milky Way, яблочный сок и печень — но всегда найдёт, чем удивить на кухне!
+                </div>
+                <div class="storybook-page" data-page="5">
+                    <span>🎁</span> Обожает подарки без повода — маленькие сюрпризы заставляют её сердце петь.
+                </div>
+                <div class="storybook-page" data-page="6">
+                    <span>💕</span> Заботливая и общительная, она готовит так вкусно, что её блюда — как объятия для души.
+                </div>
+                <div class="storybook-page" data-page="7">
+                    <span>🌌</span> Любит смотреть на звёзды, мечтая о далёких мирах и новых приключениях.
+                </div>
+                <div class="storybook-page" data-page="8">
+                    <span>📸</span> Увлекается фотографией, ловя красоту в каждом мгновении.
+                </div>
+                <div class="storybook-page" data-page="9">
+                    <span>✈️</span> Мечтает путешествовать по миру, открывая новые культуры и горизонты.
+                </div>
+            </div>
+            <div class="storybook-nav">
+                <button onclick="prevPage()">Назад</button>
+                <button onclick="nextPage()">Вперёд</button>
+            </div>
+            <button onclick="closeModal('kristina-info-modal')">Закрыть</button>
+        </div>
+    </div>
 
     <script>
-        // Music control
-        const music = document.getElementById('background-music');
-        const musicToggle = document.getElementById('music-toggle');
-        let isPlaying = false;
+        // Sound handling
+        let isSoundOn = false;
+        const chimeSound = new Audio('https://www.soundjay.com/buttons/sounds/button-09.mp3');
+        chimeSound.loop = false;
 
-        musicToggle.addEventListener('click', () => {
-            if (isPlaying) {
-                music.pause();
-                musicToggle.textContent = '🎵';
-                isPlaying = false;
-            } else {
-                music.muted = false;
-                music.play().catch(error => {
-                    console.error('Audio playback failed:', error);
-                    musicToggle.textContent = '🎵';
-                    isPlaying = false;
-                });
-                musicToggle.textContent = '🔇';
-                isPlaying = true;
-            }
-        });
 
-        // Typewriter effect for love message
-        const loveMessages = [
-            "Ты - моё счастье каждый день! 💖",
-            "С тобой время летит незаметно... 😘",
-            "Люблю тебя больше всего на свете! 🌟",
-            "Мы - идеальная пара! 💑"
-        ];
-        let messageIndex = 0;
-        let charIndex = 0;
-        const loveMessageElement = document.getElementById('love-message');
 
-        function typeMessage() {
-            if (charIndex < loveMessages[messageIndex].length) {
-                loveMessageElement.textContent += loveMessages[messageIndex].charAt(charIndex);
-                charIndex++;
-                setTimeout(typeMessage, 100);
-            } else {
-                setTimeout(() => {
-                    loveMessageElement.textContent = '';
-                    charIndex = 0;
-                    messageIndex = (messageIndex + 1) % loveMessages.length;
-                    typeMessage();
-                }, 2000);
+        // Play sound on interaction
+        function playInteractionSound() {
+            if (isSoundOn) {
+                chimeSound.play();
             }
         }
 
@@ -325,26 +494,28 @@
 
             const message = document.querySelector('.message');
             if (diffDays === 1) {
-                message.textContent = 'Наш первый день вместе!';
+                message.textContent = 'Наш первый день вместе! 💖';
             } else if (diffDays < 7) {
-                message.textContent = `Мы вместе уже ${diffDays} дня!`;
+                message.textContent = `Мы вместе уже ${diffDays} дня! 😊`;
             } else if (diffDays < 30) {
-                message.textContent = `Мы вместе уже ${diffDays} дней!`;
+                message.textContent = `Мы вместе уже ${diffDays} дней! 🌟`;
             } else if (diffDays < 365) {
                 const months = Math.floor(diffDays / 30);
-                message.textContent = `Мы вместе уже ${months} ${months === 1 ? 'месяц' : months < 5 ? 'месяца' : 'месяцев'}!`;
+                message.textContent = `Мы вместе уже ${months} ${months === 1 ? 'месяц' : months < 5 ? 'месяца' : 'месяцев'}! 💕`;
             } else {
                 const years = Math.floor(diffDays / 365);
                 const remainingDays = diffDays % 365;
-                message.textContent = `Мы вместе уже ${years} ${years === 1 ? 'год' : years < 5 ? 'года' : 'лет'} и ${remainingDays} дней!`;
+                message.textContent = `Мы вместе уже ${years} ${years === 1 ? 'год' : years < 5 ? 'года' : 'лет'} и ${remainingDays} дней! 🌹`;
             }
         }
-        
-        // Floating hearts
-        function createHearts() {
+
+        // Create floating hearts and sparkles
+        function createHeartsAndStars() {
             const container = document.getElementById('hearts-container');
-            const heartCount = 20;
+            const heartCount = 15;
+            const sparkleCount = 20;
             
+            // Floating hearts
             for (let i = 0; i < heartCount; i++) {
                 const heart = document.createElement('div');
                 heart.className = 'floating-heart';
@@ -356,25 +527,125 @@
                 heart.style.animationDelay = (Math.random() * 5) + 's';
                 container.appendChild(heart);
             }
+
+            // Sparkles
+            for (let i = 0; i < sparkleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = (Math.random() * 2) + 's';
+                container.appendChild(sparkle);
+            }
         }
 
-        // Sparkle effect
-        function createSparkle() {
-            const sparkle = document.createElement('div');
-            sparkle.className = 'sparkle';
-            sparkle.style.left = Math.random() * window.innerWidth + 'px';
-            sparkle.style.top = Math.random() * window.innerHeight + 'px';
-            document.body.appendChild(sparkle);
-            setTimeout(() => sparkle.remove(), 1500);
+        // Modal handling
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.querySelector('.modal-content').classList.add('show');
+                if (modalId === 'kristina-info-modal') {
+                    showPage(1);
+                }
+            }, 10);
+            playInteractionSound();
         }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.querySelector('.modal-content').classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+            playInteractionSound();
+        }
+
+        // Storybook navigation
+        let currentPage = 1;
+
+        function showPage(pageNum) {
+            document.querySelectorAll('.storybook-page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.querySelector(`.storybook-page[data-page="${pageNum}"]`).classList.add('active');
+            currentPage = pageNum;
+
+            // Update button states
+            document.querySelector('.storybook-nav button[onclick="prevPage()"]').disabled = currentPage === 1;
+            document.querySelector('.storybook-nav button[onclick="nextPage()"]').disabled = currentPage === document.querySelectorAll('.storybook-page').length;
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                showPage(currentPage - 1);
+                playInteractionSound();
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < document.querySelectorAll('.storybook-page').length) {
+                showPage(currentPage + 1);
+                playInteractionSound();
+            }
+        }
+
+        // Password check for Maxim
+        function checkMaximPassword() {
+            const password = document.getElementById('maxim-password').value;
+            const errorText = document.getElementById('maxim-error-text');
+            if (password === '200606') {
+                closeModal('maxim-modal');
+                openModal('maxim-info-modal');
+                errorText.style.display = 'none';
+                document.getElementById('maxim-password').value = '';
+            } else {
+                errorText.style.display = 'block';
+                playInteractionSound();
+            }
+        }
+
+        // Password check for Kristina
+        function checkPassword() {
+            const password = document.getElementById('kristina-password').value;
+            const errorText = document.getElementById('error-text');
+            if (password === '7669') {
+                closeModal('kristina-modal');
+                openModal('kristina-info-modal');
+                errorText.style.display = 'none';
+                document.getElementById('kristina-password').value = '';
+            } else {
+                errorText.style.display = 'block';
+                playInteractionSound();
+            }
+        }
+
+        // Event listeners
+        document.getElementById('maxim-avatar').addEventListener('click', () => openModal('maxim-modal'));
+        document.getElementById('kristina-avatar').addEventListener('click', () => openModal('kristina-modal'));
+
+        // Close modals on background click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal(modal.id);
+                    if (modal.id === 'kristina-modal') {
+                        document.getElementById('error-text').style.display = 'none';
+                        document.getElementById('kristina-password').value = '';
+                    } else if (modal.id === 'maxim-modal') {
+                        document.getElementById('maxim-error-text').style.display = 'none';
+                        document.getElementById('maxim-password').value = '';
+                    }
+                    playInteractionSound();
+                }
+            });
+        });
 
         // Initialize
         window.onload = function() {
             updateCounter();
-            createHearts();
-            typeMessage();
+            createHeartsAndStars();
             setInterval(updateCounter, 1000);
-            setInterval(createSparkle, 500);
         };
     </script>
 </body>
